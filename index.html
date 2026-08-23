@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bức thư đến 06.08.2029</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="hearts" aria-hidden="true"></div>
+
+  <main class="page-shell" id="pageShell">
+    <section class="letter-card" id="letterCard">
+      <div class="letter-badge">💌 Bức thư nhỏ</div>
+
+      <h1 class="question">Thảo Nguyên liệu còn yêu Lê Nguyên chứ</h1>
+
+      <div class="gif-frame">
+        <img
+          class="gif"
+          alt="GIF dễ thương"
+          src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExeHdnY2YwYzIxdmgxYTRvaHNib2Q0bzBtN2JpbnRxNWhjbGZ4YjR5ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Z21HJj2kz9uBG/giphy.gif"
+        >
+      </div>
+
+      <div class="letter-message" id="letterMessage" aria-live="polite">
+        <p>
+          chúng ta chia tay nhau vì nhiều vết thương đã gây ra cho nhau nhưng mà bo vẫn còn rất yêu ấy , mong rằng 3 năm sau khi bo đã thay đổi bản thân , tính cách , cách quan tâm thảo nguyên , mình có thể nào tìm hiểu nhau lại một lần nữa nhé
+        </p>
+      </div>
+
+      <div class="button-playground">
+        <button class="yes-btn" type="button">Yes 💗</button>
+        <button class="no-btn" type="button">No</button>
+      </div>
+    </section>
+
+    <aside class="countdown-card" id="countdownCard" aria-hidden="true">
+      <div class="countdown-icon" aria-hidden="true">⏳</div>
+      <p class="eyebrow">Đếm ngược đến</p>
+      <h2 id="headline">06 · 08 · 2029</h2>
+      <p class="countdown-note">Thời gian còn lại tính từ thời điểm hiện tại</p>
+
+      <div id="countdown" class="countdown-grid" aria-live="polite">
+        <div class="time-box">
+          <span id="days" class="time-number">000</span>
+          <span class="time-label">Ngày</span>
+        </div>
+        <div class="time-box">
+          <span id="hours" class="time-number">00</span>
+          <span class="time-label">Giờ</span>
+        </div>
+        <div class="time-box">
+          <span id="minutes" class="time-number">00</span>
+          <span class="time-label">Phút</span>
+        </div>
+        <div class="time-box">
+          <span id="seconds" class="time-number">00</span>
+          <span class="time-label">Giây</span>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-line">
+          <span id="timelineProgress" class="timeline-progress"></span>
+        </div>
+        <div class="timeline-labels">
+          <span>Hôm nay</span>
+          <span>06/08/2029</span>
+        </div>
+      </div>
+
+      <div id="reachedMessage" class="reached-message" hidden>
+        ✨ Đã đến ngày 06/08/2029 ✨
+      </div>
+    </aside>
+  </main>
+
+  <div class="goodbye-screen" id="goodbyeScreen" aria-live="assertive" aria-hidden="true">
+    <div class="goodbye-heart">♥</div>
+    <div class="goodbye-text">Tạm biệt</div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
