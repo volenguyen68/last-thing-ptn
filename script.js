@@ -1,3 +1,11 @@
+// Sau khi deploy Cloudflare Worker, thay URL bên dưới bằng URL workers.dev của bạn.
+const SITE_GATE = Object.freeze({
+  workerUrl: 'https://one-time-letter-gate.volenguyen68.workers.dev',
+  fallbackUrl: 'https://volenguyen68.github.io/loicuoicungcuakesuytinh/'
+});
+
+const siteAccessPromise = checkSiteAccess();
+
 const yesBtn = document.querySelector('.yes-btn');
 const noBtn = document.querySelector('.no-btn');
 const question = document.querySelector('.question');
@@ -11,19 +19,19 @@ const goodbyeScreen = document.getElementById('goodbyeScreen');
 
 const noMessages = [
   {
-    text: 'Suy nghĩ kĩ rồi chọn được nhé 🥺',
+    text: 'Không cần trả lời vội đâu.',
     gif: 'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExOWh1MnRwaDBmN3R3cHZocmc4dzhhY3g1NW1oaGg1YjB3Y2VjaXV0dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/WWUSelKQYSRNNYWCNR/giphy.gif'
   },
   {
-    text: 'Thiệt hỏ 😢',
+    text: 'Cứ để chiếc đồng hồ giữ câu trả lời nhé.',
     gif: 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbGZkMXVmZTgzemNsbzE5OWl1aGNjZ3hhY2NkYTc0OHNmMmhuNXgyMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/rDUjFhC3FYJmaJpTEn/giphy.gif'
   },
   {
-    text: 'vây sao lại quan tâm mà mò ra được bí mật này hay thế 😭',
+    text: 'Nếu bạn đã tìm được đến đây, có lẽ bạn hiểu vì sao ngày này được giữ lại.',
     gif: 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExbjJvdWZzYXc1NGJ6aGp1cDE3b2dyNnVzOGN1andkMjVrMmRzeGwwZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3OhXBaoR1tVPW/giphy.gif'
   },
   {
-    text: 'Vây thì Thảo Nguyên có câu trả lời rồi ấy nhấn nó một lần nữa nhé, xin lỗi vì làm phiền Thảo Nguyên nhé',
+    text: 'Cảm ơn bạn đã đọc. Người viết tôn trọng câu trả lời của bạn.',
     gif: 'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExZGIzN2w4eHA5NHNidGJiYXl6MHA0bDNraDhiYWV4ZGpheXNjNjk4aiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/OPU6wzx8JrHna/giphy.gif'
   }
 ];
@@ -32,13 +40,45 @@ const MAX_NO_CLICKS = 5;
 let noClickCount = 0;
 let hasAnsweredYes = false;
 
-// =====================================================
-// YES: MỞ BỨC THƯ + HIỆN ĐỒNG HỒ
-// =====================================================
-yesBtn.addEventListener('click', () => {
-  if (hasAnsweredYes) return;
-  hasAnsweredYes = true;
+async function checkSiteAccess() {
+  try {
+    const response = await fetch(`${SITE_GATE.workerUrl}/status`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json'
+      },
+      cache: 'no-store'
+    });
 
+    if (!response.ok) {
+      throw new Error(`Không kiểm tra được trạng thái: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.locked === true) {
+      window.location.replace(SITE_GATE.fallbackUrl);
+      return false;
+    }
+
+    document.documentElement.classList.remove('site-checking');
+    return true;
+  } catch (error) {
+    console.error(error);
+
+    // Nếu Worker gặp lỗi thì chuyển sang trang dự phòng.
+    window.location.replace(SITE_GATE.fallbackUrl);
+    return false;
+  }
+}
+
+// =====================================================
+// YES: MỞ BỨC THƯ VÀ HIỆN ĐỒNG HỒ
+// =====================================================
+yesBtn.addEventListener('click', async () => {
+  if (!(await siteAccessPromise) || hasAnsweredYes) return;
+
+  hasAnsweredYes = true;
   yesBtn.disabled = true;
   noBtn.disabled = true;
 
@@ -46,7 +86,7 @@ yesBtn.addEventListener('click', () => {
   letterCard.classList.add('opening');
 
   setTimeout(() => {
-    question.textContent = 'Gửi chít một dòng nhỏ cho tương lai 💌';
+    question.textContent = 'Một dòng được để lại cho tương lai 💌';
     question.classList.remove('question-leave');
     question.classList.add('question-arrive');
 
@@ -56,19 +96,19 @@ yesBtn.addEventListener('click', () => {
     noBtn.style.display = 'none';
     buttonPlayground.classList.add('answered');
 
-    // Mở bố cục và cho đồng hồ xuất hiện sau hiệu ứng mở thư.
     pageShell.classList.add('opened');
     countdownCard.setAttribute('aria-hidden', 'false');
     letterMessage.classList.add('show');
+
     burstHearts(18);
   }, 420);
 });
 
 // =====================================================
-// NO: ĐỔI NỘI DUNG, CHẠY NÚT; LẦN THỨ 5 -> "TẠM BIỆT"
+// NO: LẦN THỨ 5 SẼ KHÓA TRANG
 // =====================================================
-noBtn.addEventListener('click', () => {
-  if (hasAnsweredYes) return;
+noBtn.addEventListener('click', async () => {
+  if (!(await siteAccessPromise) || hasAnsweredYes) return;
 
   noClickCount++;
 
@@ -78,6 +118,7 @@ noBtn.addEventListener('click', () => {
   }
 
   const message = noMessages[(noClickCount - 1) % noMessages.length];
+
   question.textContent = message.text;
   gif.src = message.gif;
 
@@ -98,24 +139,60 @@ function moveNoButton() {
   noBtn.style.top = `${randomY}px`;
 }
 
-function showGoodbyeAndLeave() {
+// Gửi sự kiện hoàn tất đến Worker.
+// Các khóa Pushover không được đặt trong file này.
+async function lockSiteAndNotifyOwner() {
+  const response = await fetch(`${SITE_GATE.workerUrl}/complete`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      event: 'completed'
+    }),
+    cache: 'no-store'
+  });
+
+  if (!response.ok) {
+    throw new Error(`Không khóa được trang: ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  if (data.locked !== true) {
+    throw new Error('Máy chủ chưa xác nhận trạng thái khóa.');
+  }
+}
+
+async function showGoodbyeAndLeave() {
   yesBtn.disabled = true;
   noBtn.disabled = true;
 
   goodbyeScreen.setAttribute('aria-hidden', 'false');
   goodbyeScreen.classList.add('show');
 
-  // Trình duyệt không cho website tự xóa toàn bộ lịch sử duyệt web.
-  // location.replace() thay thế trang hiện tại trong history bằng trang đích.
-  setTimeout(() => {
-    window.location.replace('about:blank');
-  }, 1800);
+  const minimumDisplayTime = new Promise((resolve) => {
+    setTimeout(resolve, 1800);
+  });
+
+  try {
+    await Promise.all([
+      lockSiteAndNotifyOwner(),
+      minimumDisplayTime
+    ]);
+  } catch (error) {
+    console.error(error);
+    await minimumDisplayTime;
+  }
+
+  window.location.replace(SITE_GATE.fallbackUrl);
 }
 
 // =====================================================
-// COUNTDOWN ĐẾN 00:00 NGÀY 06/08/2029 - GIỜ VIỆT NAM
+// ĐẾM NGƯỢC ĐẾN 00:00 NGÀY 06/08/2032 – GIỜ VIỆT NAM
 // =====================================================
-const targetDate = new Date('2029-08-06T00:00:00+07:00');
+const targetDate = new Date('2032-08-06T00:00:00+07:00');
 const pageOpenedAt = new Date();
 
 const dayMs = 24 * 60 * 60 * 1000;
@@ -138,7 +215,9 @@ function updateNumber(element, value, minLength = 2) {
   if (element.textContent !== formatted) {
     element.textContent = formatted;
     element.classList.remove('digit-pop');
+
     void element.offsetWidth;
+
     element.classList.add('digit-pop');
   }
 }
@@ -153,10 +232,11 @@ function updateCountdown() {
     updateNumber(minutesEl, 0);
     updateNumber(secondsEl, 0);
 
-    headlineEl.textContent = '06 · 08 · 2029';
+    headlineEl.textContent = '06 · 08 · 2032';
     countdownEl.classList.add('countdown-finished');
     reachedMessage.hidden = false;
     timelineProgress.style.width = '100%';
+
     return false;
   }
 
@@ -172,15 +252,18 @@ function updateCountdown() {
 
   const fullRange = targetDate.getTime() - pageOpenedAt.getTime();
   const elapsed = now.getTime() - pageOpenedAt.getTime();
+
   const progress = fullRange > 0
     ? Math.min(100, Math.max(0, (elapsed / fullRange) * 100))
     : 100;
 
   timelineProgress.style.width = `${progress}%`;
+
   return true;
 }
 
 updateCountdown();
+
 const countdownTimer = setInterval(() => {
   if (!updateCountdown()) {
     clearInterval(countdownTimer);
@@ -197,18 +280,27 @@ function createHeart(extraBurst = false) {
 
   heart.className = `heart${extraBurst ? ' burst-heart' : ''}`;
   heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+
   heart.style.left = `${Math.random() * 100}%`;
   heart.style.fontSize = `${14 + Math.random() * 17}px`;
-  heart.style.animationDuration = `${extraBurst ? 2.8 + Math.random() * 2 : 5 + Math.random() * 5}s`;
+
+  heart.style.animationDuration =
+    `${extraBurst ? 2.8 + Math.random() * 2 : 5 + Math.random() * 5}s`;
+
   heart.style.animationDelay = `${Math.random() * 0.35}s`;
 
   heartsContainer.appendChild(heart);
-  setTimeout(() => heart.remove(), extraBurst ? 5200 : 11000);
+
+  setTimeout(() => {
+    heart.remove();
+  }, extraBurst ? 5200 : 11000);
 }
 
 function burstHearts(amount) {
   for (let i = 0; i < amount; i++) {
-    setTimeout(() => createHeart(true), i * 55);
+    setTimeout(() => {
+      createHeart(true);
+    }, i * 55);
   }
 }
 
@@ -218,5 +310,8 @@ for (let i = 0; i < 10; i++) {
 
 setInterval(() => {
   createHeart();
-  if (Math.random() > 0.55) createHeart();
+
+  if (Math.random() > 0.55) {
+    createHeart();
+  }
 }, 700);
