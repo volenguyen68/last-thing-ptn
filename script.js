@@ -23,15 +23,15 @@ const noMessages = [
     gif: 'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExOWh1MnRwaDBmN3R3cHZocmc4dzhhY3g1NW1oaGg1YjB3Y2VjaXV0dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/WWUSelKQYSRNNYWCNR/giphy.gif'
   },
   {
-    text: 'Cứ để chiếc đồng hồ giữ câu trả lời nhé.',
+    text: 'Tớ luôn đợi cậu',
     gif: 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbGZkMXVmZTgzemNsbzE5OWl1aGNjZ3hhY2NkYTc0OHNmMmhuNXgyMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/rDUjFhC3FYJmaJpTEn/giphy.gif'
   },
   {
-    text: 'Nếu bạn đã tìm được đến đây, có lẽ bạn hiểu vì sao ngày này được giữ lại.',
+    text: 'Nếu cậu đã tìm được đến đây, có lẽ bạn hiểu vì sao ngày này được giữ lại.',
     gif: 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExbjJvdWZzYXc1NGJ6aGp1cDE3b2dyNnVzOGN1andkMjVrMmRzeGwwZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3OhXBaoR1tVPW/giphy.gif'
   },
   {
-    text: 'Cảm ơn bạn đã đọc. Người viết tôn trọng câu trả lời của bạn.',
+    text: 'Cảm ơn cậu đã đọc. Nhớ cho tớ biết nha',
     gif: 'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExZGIzN2w4eHA5NHNidGJiYXl6MHA0bDNraDhiYWV4ZGpheXNjNjk4aiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/OPU6wzx8JrHna/giphy.gif'
   }
 ];
