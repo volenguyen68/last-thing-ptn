@@ -27,7 +27,7 @@ const noMessages = [
     gif: 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbGZkMXVmZTgzemNsbzE5OWl1aGNjZ3hhY2NkYTc0OHNmMmhuNXgyMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/rDUjFhC3FYJmaJpTEn/giphy.gif'
   },
   {
-    text: 'Nếu cậu đã tìm được đến đây, có lẽ bạn hiểu vì sao ngày này được giữ lại.',
+    text: 'Nếu cậu đã tìm được đến đây, có lẽ cậu hiểu vì sao ngày này được giữ lại.',
     gif: 'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExbjJvdWZzYXc1NGJ6aGp1cDE3b2dyNnVzOGN1andkMjVrMmRzeGwwZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3OhXBaoR1tVPW/giphy.gif'
   },
   {
