@@ -1,7 +1,7 @@
 // Sau khi deploy Cloudflare Worker, thay URL bên dưới bằng URL workers.dev của bạn.
 const SITE_GATE = Object.freeze({
   workerUrl: 'https://one-time-letter-gate.volenguyen68.workers.dev',
-  fallbackUrl: 'https://volenguyen68.github.io/whatisthat'
+  fallbackUrl: 'https://volenguyen68.github.io/whatisthat/'
 });
 
 const siteAccessPromise = checkSiteAccess();
